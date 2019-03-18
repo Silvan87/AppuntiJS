@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Appunti</title>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAx8PEAEowLABPQ0EAGcLwAJTN1ACn0t4AW7PNAACd1QCw0NsAAKfaAACm3QCP5/cAluT3AFZOTABIOTUAAKHbAHRubQAeHB0AAKTbAD4wLgDV5ucAqsTdAAjC8gAAo94AxdnjANPl6gDn29wADqHbAIWcqgAAotkAp8jjAACl2QANnNkAjYV/AJ3G4QCw1dcACHPAAKLD4QAWe8IAncTfACQbGQAApdoA0M3MADowMABGPjoAOzAoAACc2wBLRT8Ae3d3ALTT3gAAo9gACHG/AMHAuABEMjMAGqbXAPLy8AAAod4Ajuj4AAvD8gCb4/UAnJybADUvLACdnJsASj47AIfH0QBLPjsAAKPZAJ/B4QC9vLwAvry8AC2m1wCf09gArqmoAACe1wCo4+0AAJ3aABwSFAA/TUwAnczLAI7CxwBBNjIART03AACi3QBRREQAqqmpAKXm9gCyra4AAKXdAC4pJgALdMEAAMPsAACd2wDU7/QAAG66AKSjogDd4OQArKenAACj2wAFxe8Aps7XAJTo8gAoIiIAm46LAAfE8gBtxN0AkIiEAAl3ugAApNkAAKfZAK+nqAAAptwACaTZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXxEBGxsbODg4ODgAAAAAADFOQVBPFQAAAAAAAAAAAABgSAYFBycmAAAAAAAAAAAAADIkGTcIayMAAAAAAAAAAAAaaUczOVxeHwAAAAAAAAAAXQQKCyoQTDQWAAAAAAAAAABlaCBvEx5KWkQAAAAAAAAAAA1bWBMzQy8lKAAAAAAAAAAAOhdsE2JTIR01AAAAAAAAAABWOxhtHAkiTWEAAAAAAAAAAAxjcGRqWQISVQAAAAAAAAAAPEtnFFI2LilGAAAAAAAAAAArLTBAD1FmVwAAAAAAAAAAAEkOA0I+PwAAAAAAAAAAAAAAblQsPQAAAAAAAAAAAAAAAABFRQAAAAAfAAAD/wAAAf8AAID/AACAfwAAgD8AAMAfAADgDwAA8AcAAPgDAAD8AQAA/gAAAP8AAAD/gQAA/8MAAP/nAAA=" rel="icon" type="image/x-icon" />
+    <script src="appunti.js"></script>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    html {
+        font-size: 16px;
+    }
+    html, body, input, textarea, code {
+        background: #555;
+        color:#ccc;
+        font-size: 1rem;
+        font-family: sans-serif;
+        line-height: 1.25rem;
+    }
+    body {
+        padding: .5rem;
+    }
+    input:focus, textarea:focus, button:focus, code:focus {
+        outline: none;
+    }
+    ::selection {
+        background: #9e9e0a;
+        color: white;
+    }
+    #categoria {
+        color: #cc0;
+        font-weight: bold;
+    }
+    input, button {
+        height: 2rem;
+    }
+    label, input, textarea, code {
+        padding: .125rem;
+        line-height: 1.45rem;
+    }
+    textarea {
+        resize: none;
+    }
+    #ricerca {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        min-height: 2.5rem;
+    }
+    #ricerca label {
+        display: inline-block;
+        margin-right: .5rem;
+    }
+    #ricerca input {
+        flex: 1;
+        margin-bottom: .5rem;
+        border: none;
+        border-bottom: 2px solid #cc0;
+    }
+    .comandi {
+        margin-left: .25rem;
+    }
+    .comandi button {
+        width: 2rem;
+        border-radius: 1rem;
+        background: #dfca14;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #e4e437 #9e9e0a #9e9e0a #e4e437;
+        font-weight: bold;
+        margin: 0 0 .5rem .25rem;
+        background-repeat: no-repeat;
+        background-origin: border-box;
+        background-position: 5px 5px;
+        background-size: 22px;
+    }
+    .comandi button:active {
+        background-color: #9e9e0a;
+        background-position: 6px 6px;
+        border-color: #9e9e0a #e4e437 #e4e437 #9e9e0a;
+    }
+    /* Modified icons under CC0 1.0 Universal Public Domain Dedication from aiconica.net */
+    .comandi .copiaAppunto {
+        background-image: url(" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAdklEQVQ4y2NgIAr8/4+KSQbYNIPYL14gxN+9w5THayEuV4HYP38q7mNgAGEGht+/cRuM1XBckiD+nz8IPrrBIHD2LIkGo7sGn68Gh8EwwMiIHVNsMDmpCY8kLCXgwoMxjGkeeaNhPOTCeCgZTAmmn8HUMJwOAAB7Ick4UF8kVAAAAABJRU5ErkJggg==");
+    }
+    .comandi .salvaAppunto {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWAQMAAAD+ev54AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAADpJREFUCB0FwTEVABAUAMDzDH8UQQUJ5DIYRBNFBKPRHQAAGgYe6ZIPsbWyjMrs9El9lEsc8iYtAPABxWoLR/tMQrQAAAAASUVORK5CYII=");
+    }
+    .comandi .salvaAppuntoModificato {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAJ0lEQVQ4y2NgGAWjYBTgBIwI5v//aFIUyTHRysVDz+BRMApGAR4AAFVDBggu+5KyAAAAAElFTkSuQmCC");
+    }
+    .comandi .eliminaAppunto {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAA8UlEQVQ4y7WVOw7DIAyGOUDXbpk7dKvUa2TuEXqB3qKHqppDhSVKKguZh1+ARJGsEPj9yYANzgnttASrNdRVtSCYHun//NG1+Rz4qHCYuDxtgDUGvgzOocehgTg0aa9vAs+XH4T77pz3jmg4FDSgTfC4LWX4CIUvWAnnUNSVcAFMHTS4rYlMeYm547qmOejrUJYhdfi2BeuA6nAanbaKSi7LcBolRt8B7QUjrEzXwVuhlv+Iw2OMkekWWX8rkDEljUbArZcQP/0cLpQ0dO5evzbzPLWuTXFrYWB+8QVLya+llvmK3L5tFUXhTe9e6yNp6X4/DTU0/L/qwAAAAABJRU5ErkJggg==");
+    }
+    .comandi .downloadAppunti {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWAQMAAAD+ev54AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAADFJREFUCNdjYKhgYMCH2f83MDD/Z2Bg/Afk/4GIFRhYMHxgsAHj////wHH9/x8MUAAAFIoXUIkx3WQAAAAASUVORK5CYII=");
+    }
+    #risultati {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #elencoAppunti {
+        flex: 1;
+        margin: .5rem .5rem 0 0;
+        padding: .5rem;
+        min-width: 15rem;
+        background: #666;
+    }
+    #elencoAppunti label {
+        display: block;
+        color: #eee;
+    }
+    #elencoAppunti label.nuovoAppunto {
+        color:#aaa;
+    }
+    #elencoAppunti label:hover {
+        color: #cc0;
+    }
+    #appunto {
+        flex: 3;
+        width: 100%;
+        min-width: 15rem;
+        height: calc(100vh - 4.2rem);
+        margin-top: .5rem;
+        padding: .5rem;
+        border: none;
+        font-family: monospace;
+    }
+    </style>
+</head>
+
+<body onload="selezionaParoleChiave()">
+    <div id="ricerca">
+        <label id="categoria">*</label>
+        <input type="text" id="parole-chiave" onkeypress="controllaComando(event)"
+            value="">
+        <div class="comandi">
+            <button onclick="copiaAppunto()" title="Copia appunto"
+                class="copiaAppunto">&nbsp;</button>
+            <button onclick="salvaAppunto(CON_TITOLO)" title="Salva appunto nel browser"
+                onmouseover="autoSalvataggio=false" onmouseout="autoSalvataggio=true"
+                class="salvaAppunto" id="btnSalva">&nbsp;</button>
+            <button onclick="eliminaAppunto()" title="Elimina appunto dal browser"
+                onmouseover="autoSalvataggio=false" onmouseout="autoSalvataggio=true"
+                class="eliminaAppunto">&nbsp;</button>
+            <button onclick="downloadAppunti()" title="Download appunti su file"
+                class="downloadAppunti">&nbsp;</button>
+        </div>
+    </div>
+    <div id="risultati">
+        <div id="elencoAppunti"></div>
+        <code id="appunto" contenteditable="true"
+            onkeydown="inserisciTabulazione(this, event);" oninput="segnalaAppuntoModificato(true)"
+            onblur="if (appuntoModificato && autoSalvataggio) salvaAppunto();"></code>
+    </div>
+
+<script type="text/javascript">
+// Costanti
+const CON_TITOLO = true;
+
+// Variabili generali
+var categoriaCorrente = '*';
+var paroleRicerca = [];
+var appuntiTrovati = [];
+var appuntoCorrente = {
+    'indice': -1,
+    'titolo': [],
+    'categoria': '*'
+}
+var autoSalvataggio = true;
+var appuntoModificato = false;
+
+// Elementi usati con frequenza
+var e_categoria = document.getElementById('categoria');
+var e_parole_chiave = document.getElementById('parole-chiave');
+var e_elenco_appunti = document.getElementById('elencoAppunti');
+var e_appunto = document.getElementById('appunto');
+var e_btn_salva = document.getElementById('btnSalva');
+
+function ordinaAppuntiTrovati() {
+    appuntiTrovati.sort((a, b) => {
+        let differenzaPunteggio = b.punteggio - a.punteggio;
+        if (differenzaPunteggio === 0) {
+            return appunti[a.categoria][a.indice][0].length - appunti[b.categoria][b.indice][0].length;
+        } else {
+            return differenzaPunteggio;
+        }
+    });
+}
+
+function cercaAppuntiInCategoria(categoria) {
+    for (let i = 0; i < appunti[categoria].length; i++) {
+        let punteggio = 0;
+        let almenoUnaParola = false;
+        for (let j = 0; j < paroleRicerca.length; j++) {
+            if (appunti[categoria][i][0].indexOf(paroleRicerca[j]) !== -1) {
+                almenoUnaParola = true;
+                punteggio++;
+            } // TODO else if: verificare che una parola di ricerca sia contenuta (anche non intera)
+        }
+        if (almenoUnaParola) {
+            appuntiTrovati.push({
+                'indice': i,
+                'punteggio': punteggio,
+                'categoria': categoria
+            });
+        }
+    }
+}
+
+function cercaAppuntiRilevanti() {
+    // Svuota gli ultimi appunti trovati
+    appuntiTrovati = [];
+    // Controlla che le parole di ricerca siano valide
+    if (paroleRicerca.length > 0 && paroleRicerca[0] !== '') {
+        // Cerca in tutte le categorie
+        if (categoriaCorrente === '*') {
+            for (let categoria in appunti) {
+                cercaAppuntiInCategoria(categoria);
+            }
+        // Cerca nella categoria corrente
+        } else if (appunti[categoriaCorrente] !== undefined) {
+            cercaAppuntiInCategoria(categoriaCorrente);
+        }
+        ordinaAppuntiTrovati();
+    }
+}
+
+function titoloAppuntoInElenco() {
+    for (let i = 0; i < e_elenco_appunti.childElementCount; i++) {
+        if (e_parole_chiave.value === e_elenco_appunti.childNodes[i].dataset.paroleRicerca) {
+            return true; // titolo trovato
+        }
+    }
+    return false; // titolo non trovato
+}
+
+function preparaInserimentoNuovoAppunto() {
+    if (e_parole_chiave.value !== '' &&
+        (!e_elenco_appunti.firstChild || !titoloAppuntoInElenco())) {
+
+        let e_label = document.createElement('label');
+        e_label.onclick = function() { mostraAppunto(-1) };
+        e_label.innerHTML = '(nuovo) ' + e_parole_chiave.value;
+        e_label.classList.add('nuovoAppunto');
+        e_elenco_appunti.insertBefore(e_label, e_elenco_appunti.firstChild);
+    }
+}
+
+function mostraAppuntiTrovati() {
+    cercaAppuntiRilevanti();
+    // Rimuovi le etichette degli ultimi appunti trovati
+    while (e_elenco_appunti.firstChild) {
+        e_elenco_appunti.removeChild(e_elenco_appunti.firstChild);
+    }
+    // Crea elenco di etichette per ogni appunto trovato
+    for (let i = 0; i < appuntiTrovati.length; i++) {
+        let e_label = document.createElement('label');
+        let categoriaAppunto = appuntiTrovati[i].categoria;
+        e_label.onclick = function() { mostraAppunto(i) };
+        e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
+        if (categoriaCorrente === '*') {
+            e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
+        } else {
+            e_label.innerHTML = e_label.dataset.paroleRicerca;
+        }
+        e_elenco_appunti.appendChild(e_label);
+    }
+    preparaInserimentoNuovoAppunto();
+    appuntoCorrente.titolo = [];
+}
+
+function mostraAppunto(i) {
+    // L'indice non esiste, prepara nuovo appunto
+    if (i === -1) {
+        e_appunto.innerHTML = '';
+        e_appunto.focus();
+        appuntoCorrente.indice = -1;
+        appuntoCorrente.titolo = paroleRicerca;
+        appuntoCorrente.categoria = categoriaCorrente;
+
+    // L'indice esiste, mostra l'appunto trovato
+    } else {
+        // i: indice appunto trovato
+        // j: indice appunto nella categoria
+        let j = appuntiTrovati[i].indice;
+        let categoriaAppunto = appuntiTrovati[i].categoria;
+        e_appunto.innerHTML = appunti[categoriaAppunto][j][1]; // 1: testo appunto
+        // Aggiorna appunto corrente
+        appuntoCorrente.indice = j;
+        appuntoCorrente.titolo = appunti[categoriaAppunto][j][0]; // 0: titolo appunto
+        appuntoCorrente.categoria = categoriaAppunto;
+    }
+    segnalaAppuntoModificato(false);
+}
+
+function separaCategoriaDaParoleChiave() {
+    // Se la prima parola chiave è una parola categoria, la recupera e la separa
+    if (paroleRicerca[0] !== '' &&
+        categorie[paroleRicerca[0]] !== undefined &&
+        categorie[paroleRicerca[0]] !== categoriaCorrente) {
+
+        e_categoria.innerHTML = categorie[paroleRicerca[0]];
+        categoriaCorrente = categorie[paroleRicerca[0]];
+
+        if (paroleRicerca.length > 1) {
+            paroleRicerca.splice(0, 1);
+            e_parole_chiave.value = paroleRicerca.join(' ');
+        } else {
+            e_parole_chiave.value = '';
+        }
+    }
+}
+
+function normalizzaInputParoleChiave() {
+    e_parole_chiave.value = e_parole_chiave.value.trim().toLowerCase().replace(/[\s]+/g, ' ');
+    paroleRicerca = e_parole_chiave.value.split(' ');
+    separaCategoriaDaParoleChiave();
+}
+
+function selezionaParoleChiave() {
+    e_parole_chiave.selectionStart = 0;
+    e_parole_chiave.selectionEnd = e_parole_chiave.value.length;
+    e_parole_chiave.focus();
+}
+
+function copiaAppunto() {
+    let testoAppunto = e_appunto.innerHTML;
+    if (testoAppunto.trim() !== '') {
+        // Converte caratteri codificati nel relativo carattere
+        testoAppunto = testoAppunto
+            .replace(/<br>/g, '\n')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        // TODO Dopo aver specificato quali sono i #commenti, si potrebbe copiare solo il codice d'esempio
+        // Copia testo negli appunti di sistema
+        navigator.clipboard.writeText(testoAppunto);
+        // Seleziona ciò che è stato copiato
+        e_appunto.focus();
+        document.execCommand('selectAll');
+    }
+}
+
+function aggiungiCategoriaCorrente() {
+    if (appunti[categoriaCorrente] === undefined) {
+        appunti[categoriaCorrente] = [];
+        if (categorie[categoriaCorrente.toLowerCase()] === undefined) {
+            // TODO Qui sarebbe l'ideale poter definire la nuova categoria ed inserirla
+            // Es.: Prova prova prv (tramite prompt)
+            // TODO Come ridefinire le categorie già esistenti? Quando?
+            alert("Attenzione. La categoria che è stata creata non era prevista nell'array associativo Categorie. " +
+                "La categoria verrà creata correttamente, però affinché si possa effettivamente utilizzarla, " +
+                "occorre modificare manualmente il file 'appunti.js' ed aggiungere la nuova categoria all'array " +
+                "categorie.");
+        }
+    }
+}
+
+function aggiornaLocalStorage() {
+    // Controlla che il browser supporti localStorage
+    if (typeof(Storage) !== undefined) {
+        try {
+            localStorage.setItem("appunti_categorie", JSON.stringify(categorie));
+            localStorage.setItem("appunti_dati", JSON.stringify(appunti));
+        } catch (e) {
+            // Chrome o Chromium possono avere i permessi di scrittura nel localStorage disabilitati
+            // Firefox ed Opera dovrebbero funzionare in via predefinita
+            alert("Impossibile salvare gli appunti in modo permanente. Il browser nega l'accesso al localStorage " +
+                "da parte dei file locali. Se state usando Chrome o Chromium la soluzione è probabilmente questa: " +
+                "spostarsi in alto a destra e cliccare sul menu generale con l'icona ፧ ; cliccare su Impostazioni " +
+                "(Settings); scorrere le sezioni fino in fondo e cliccare su Avanzate (Advanced); nella sezione " +
+                "Privacy e sicurezza (Privacy and Security), cliccare su Impostazioni contenuti (Content Settings); " +
+                "poi cliccare sulla prima voce Cookie; \"Blocca cookie di terze parti\" probabilmente è attivo, ma " +
+                "può rimanere così; aggiungere un'eccezione per i file locali cliccando su Aggiungi (Add) alla voce " +
+                "Consenti (Allow); inserire nella casella di testo quanto segue: file:///* e cliccare sul pulsante " +
+                "Aggiungi (Add). D\'ora in avanti Chrome o Chromium permetteranno ai file html sul vostro PC di " +
+                "salvare qualche dato nell\'HTML5 storage. Ricaricate questa pagina html ed i salvataggi dovrebbero " +
+                "funzionare.");
+        }
+    } else {
+        // localStorage non supportato dal browser
+        alert("Impossibile salvare gli appunti in modo permanente.\nIl browser non supporta il localStorage." +
+            "\nDotarsi di un browser aggiornato.");
+        autoSalvataggio = false;
+    }
+}
+
+function salvaAppunto(conTitolo) {
+    if (e_appunto.innerHTML.trim() !== '' && appuntoCorrente.titolo.length > 0) {
+        let appuntoValido = true;
+        let appuntoCategoriaPrecedente = appuntoCorrente.categoria;
+        if (conTitolo) {
+            let titoloConCategoria =
+                prompt("Specificare categoria e titolo dell'appunto:\n\n" +
+                "Es. Categoria parola1 parola2 parolaN\n\n",
+                appuntoCorrente.categoria +' '+ appuntoCorrente.titolo.join(' '));
+
+            if (titoloConCategoria !== null && titoloConCategoria.trim() !== '') {
+                titoloConCategoria = titoloConCategoria.trim().split(' ');
+                if (titoloConCategoria.length >= 2) {
+                    let categoriaPrecedente = categoriaCorrente;
+                    categoriaCorrente = titoloConCategoria[0];
+                    appuntoCorrente.categoria = categoriaCorrente;
+                    aggiungiCategoriaCorrente();
+                    categoriaCorrente = categoriaPrecedente;
+                    // Tutte le parole chiave devono essere salvate in minuscolo
+                    appuntoCorrente.titolo = titoloConCategoria.slice(1).join(' ').toLowerCase().split(' ');
+                } else {
+                    appuntoValido = false;
+                }
+            } else {
+                appuntoValido = false;
+            }
+        }
+        if (appuntoValido) {
+            // Se l'indice non esiste, aggiungi nuovo appunto
+            if (appuntoCorrente.indice === -1) {
+                aggiungiCategoriaCorrente();
+                appunti[appuntoCorrente.categoria].push([appuntoCorrente.titolo, e_appunto.innerHTML]);
+                appuntoCorrente.indice = appunti[appuntoCorrente.categoria].length - 1;
+
+            // Se l'indice esiste, sovrascrivi l'appunto corrente
+            } else {
+                // Se l'appunto modificato ha sempre la stessa categoria, viene semplicemente sovrascritto
+                if (appuntoCorrente.categoria === appuntoCategoriaPrecedente) {
+                    appunti[appuntoCorrente.categoria][appuntoCorrente.indice] =
+                        [appuntoCorrente.titolo, e_appunto.innerHTML];
+
+                // Se la categoria è cambiata, elimina il vecchio appunto
+                // e aggiunge quello corrente alla nuova categoria
+                } else {
+                    appunti[appuntoCategoriaPrecedente].splice(appuntoCorrente.indice, 1);
+                    appunti[appuntoCorrente.categoria].push([appuntoCorrente.titolo, e_appunto.innerHTML]);
+                    appuntoCorrente.indice = appunti[appuntoCorrente.categoria].length - 1;
+                }
+                
+            }
+            // Il salvataggio automatico non deve svuotare il testo dell'appunto
+            if (!autoSalvataggio) e_appunto.innerHTML = '';
+            mostraAppuntiTrovati();
+            aggiornaLocalStorage();
+            segnalaAppuntoModificato(false);
+        } else {
+            alert("Il salvataggio dell'appunto è stato annullato.");
+        }
+    } else if(conTitolo) {
+        alert("Non è possibile salvare un appunto senza parole chiave o senza contenuto.");
+    }
+}
+
+function eliminaAppunto() {
+    e_appunto.innerHTML = '';
+    if (appuntoCorrente.indice !== -1) {
+        appunti[appuntoCorrente.categoria].splice(appuntoCorrente.indice, 1);
+        mostraAppuntiTrovati();
+        aggiornaLocalStorage();
+    }
+}
+
+function downloadAppunti() {
+    var a = document.createElement('a');
+    let str = 'var categorie, appunti;\n' +
+        'function caricaDaAppuntiJS() {\n' +
+        'categorie = ' + JSON.stringify(categorie) + '\n' +
+        'appunti = ' + JSON.stringify(appunti) + '\n' +
+        '}';
+    a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(str));
+    a.setAttribute('download', 'appunti.js');
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function caricaDaLocalStorage() {
+    // Controlla che il browser supporti localStorage
+    if (typeof(Storage) !== undefined) {
+        try {
+            categorie = JSON.parse(localStorage.getItem("appunti_categorie"));
+            appunti = JSON.parse(localStorage.getItem("appunti_dati"));
+        } catch (e) {
+            return false;
+        }
+        if (categorie !== null && appunti !== null && 
+            categorie !== undefined && appunti !== undefined) {
+            // Caricamento da localStorage avvenuto con successo
+            return true;
+        }
+    }
+    // Caricamento da localStorage fallito
+    return false;
+}
+
+function controllaComando(event) {
+    // Invio: inizia la ricerca
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        normalizzaInputParoleChiave();
+        e_appunto.innerHTML = '';
+        mostraAppuntiTrovati();
+        selezionaParoleChiave();
+        segnalaAppuntoModificato(false);
+    }
+}
+
+function segnalaAppuntoModificato(statoModifica) {
+    if (statoModifica === true) {
+        appuntoModificato = true;
+        e_btn_salva.className = 'salvaAppuntoModificato';
+    } else {
+        appuntoModificato = false;
+        e_btn_salva.className = 'salvaAppunto';
+    }
+}
+
+function inserisciTabulazione(txt, event) {
+    if (event.keyCode === 9) {
+        event.preventDefault();
+        let selection = document.getSelection();
+        let range = selection.getRangeAt(0);
+        let tabNode = document.createTextNode('\u00a0\u00a0\u00a0\u00a0');
+        range.insertNode(tabNode);
+        range.setStartAfter(tabNode);
+        range.setEndAfter(tabNode); 
+        selection.removeAllRanges();
+        selection.addRange(range);
+        appuntoModificato = true;
+    }
+}
+
+e_appunto.addEventListener('paste', function(event) {
+    // cancel paste
+    event.preventDefault();
+    // get text representation of clipboard
+    var text = (event.originalEvent || event).clipboardData.getData('text/plain');
+    // insert text manually
+    document.execCommand('insertHTML', false, text);
+});
+
+if (!caricaDaLocalStorage()) {
+    caricaDaAppuntiJS();
+}
+</script>
+</body>
+
+</html>
