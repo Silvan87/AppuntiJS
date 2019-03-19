@@ -240,6 +240,16 @@ function cercaAppuntiRilevanti() {
             cercaAppuntiInCategoria(categoriaCorrente);
         }
         ordinaAppuntiTrovati();
+    // Se non ci sono parole di ricerca, mostra gli appunti più recenti
+    // Tale elenco è disponibile solo per una specifica categoria (non per tutte)
+    } else if (paroleRicerca.length === 0 && categoriaCorrente !== '*') {
+        for (let i = appunti[categoriaCorrente].length - 1; i >= 0; i--) {
+            appuntiTrovati.push({
+                'indice': i,
+                'punteggio': 0,
+                'categoria': categoriaCorrente
+            });
+        }
     }
 }
 
@@ -328,7 +338,7 @@ function separaCategoriaDaParoleChiave() {
 
 function normalizzaInputParoleChiave() {
     e_parole_chiave.value = e_parole_chiave.value.trim().toLowerCase().replace(/[\s]+/g, ' ');
-    paroleRicerca = e_parole_chiave.value.split(' ');
+    paroleRicerca = e_parole_chiave.value.split(' ').filter(function (e) { return e !== ''; });;
     separaCategoriaDaParoleChiave();
 }
 
