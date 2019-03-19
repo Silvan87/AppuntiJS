@@ -552,11 +552,13 @@ function inserisciTabulazione(txt, event) {
 }
 
 e_appunto.addEventListener('paste', function(event) {
-    // cancel paste
+    // Annulla l'evento incolla
     event.preventDefault();
-    // get text representation of clipboard
-    var text = (event.originalEvent || event).clipboardData.getData('text/plain');
-    // insert text manually
+    // Recupera solo testo semplice dagli appunti di sistema
+    let text = (event.originalEvent || event).clipboardData.getData('text/plain');
+    // Codifica entità html e conserva i ritorni a capo
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    // Inserisce il testo come se fosse scritto manualmente
     document.execCommand('insertHTML', false, text);
 });
 
