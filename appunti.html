@@ -284,17 +284,14 @@ function mostraAppuntiTrovati() {
         e_elenco_appunti.appendChild(e_label);
     }
     preparaInserimentoNuovoAppunto();
-    appuntoCorrente.titolo = [];
 }
 
 function mostraAppunto(i) {
     // L'indice non esiste, prepara nuovo appunto
     if (i === -1) {
-        e_appunto.innerHTML = '';
-        e_appunto.focus();
-        appuntoCorrente.indice = -1;
+        svuotaAppuntoCorrente()
         appuntoCorrente.titolo = paroleRicerca;
-        appuntoCorrente.categoria = categoriaCorrente;
+        e_appunto.focus();
 
     // L'indice esiste, mostra l'appunto trovato
     } else {
@@ -404,6 +401,13 @@ function aggiornaLocalStorage() {
     }
 }
 
+function svuotaAppuntoCorrente() {
+    e_appunto.innerHTML = '';
+    appuntoCorrente.categoria = categoriaCorrente;
+    appuntoCorrente.titolo = [];
+    appuntoCorrente.indice = -1;
+}
+
 function salvaAppunto(conTitolo) {
     if (e_appunto.innerHTML.trim() !== '' && appuntoCorrente.titolo.length > 0) {
         let appuntoValido = true;
@@ -455,7 +459,7 @@ function salvaAppunto(conTitolo) {
                 
             }
             // Il salvataggio automatico non deve svuotare il testo dell'appunto
-            if (!autoSalvataggio) e_appunto.innerHTML = '';
+            if (!autoSalvataggio) svuotaAppuntoCorrente();
             mostraAppuntiTrovati();
             aggiornaLocalStorage();
             segnalaAppuntoModificato(false);
@@ -515,7 +519,7 @@ function controllaComando(event) {
     if (event.keyCode === 13) {
         event.preventDefault();
         normalizzaInputParoleChiave();
-        e_appunto.innerHTML = '';
+        svuotaAppuntoCorrente();
         mostraAppuntiTrovati();
         selezionaParoleChiave();
         segnalaAppuntoModificato(false);
