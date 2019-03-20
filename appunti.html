@@ -164,6 +164,8 @@
 <script type="text/javascript">
 // Costanti
 const CON_TITOLO = true;
+const SOLO_CATEGORIE = false;
+const APPUNTI_TROVATI = true;
 
 // Variabili generali
 var categoriaCorrente = '*';
@@ -242,15 +244,26 @@ function cercaAppuntiRilevanti() {
         ordinaAppuntiTrovati();
     // Se non ci sono parole di ricerca, mostra gli appunti più recenti
     // Tale elenco è disponibile solo per una specifica categoria (non per tutte)
-    } else if (paroleRicerca.length === 0 && categoriaCorrente !== '*') {
-        for (let i = appunti[categoriaCorrente].length - 1; i >= 0; i--) {
-            appuntiTrovati.push({
-                'indice': i,
-                'punteggio': 0,
-                'categoria': categoriaCorrente
-            });
+    } else if (paroleRicerca.length === 0) {
+        if (categoriaCorrente === '*') {
+            return SOLO_CATEGORIE;
+        } else {
+            for (let i = appunti[categoriaCorrente].length - 1; i >= 0; i--) {
+                appuntiTrovati.push({
+                    'indice': i,
+                    'punteggio': 0,
+                    'categoria': categoriaCorrente
+                });
+            }
         }
     }
+    return APPUNTI_TROVATI;
+}
+
+function cercaCategoria(categoria) {
+    e_parole_chiave.value = categoria;
+    eseguiRicercaPerParoleChiave(); // Ricerca categoria
+    eseguiRicercaPerParoleChiave(); // Ricerca vuota nella categoria
 }
 
 function titoloAppuntoInElenco() {
@@ -274,26 +287,48 @@ function preparaInserimentoNuovoAppunto() {
     }
 }
 
-function mostraAppuntiTrovati() {
-    cercaAppuntiRilevanti();
-    // Rimuovi le etichette degli ultimi appunti trovati
+function svuotaElencoEtichette() {
     while (e_elenco_appunti.firstChild) {
         e_elenco_appunti.removeChild(e_elenco_appunti.firstChild);
     }
-    // Crea elenco di etichette per ogni appunto trovato
-    for (let i = 0; i < appuntiTrovati.length; i++) {
+}
+
+function mostraElencoCategorie() {
+    var categorie = [];
+    for (let categoria in appunti) {
+        categorie.push(categoria);
+    }
+    categorie.sort();
+    for (let i in categorie) {
         let e_label = document.createElement('label');
-        let categoriaAppunto = appuntiTrovati[i].categoria;
-        e_label.onclick = function() { mostraAppunto(i) };
-        e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
-        if (categoriaCorrente === '*') {
-            e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
-        } else {
-            e_label.innerHTML = e_label.dataset.paroleRicerca;
-        }
+        e_label.innerHTML = categorie[i];
+        e_label.onclick = function() { cercaCategoria(categorie[i]) };
         e_elenco_appunti.appendChild(e_label);
     }
-    preparaInserimentoNuovoAppunto();
+}
+
+function mostraAppuntiTrovati() {
+    svuotaElencoEtichette()
+
+    if (cercaAppuntiRilevanti() === SOLO_CATEGORIE) {
+        mostraElencoCategorie();
+
+    } else {
+        // Crea elenco di etichette per ogni appunto trovato
+        for (let i = 0; i < appuntiTrovati.length; i++) {
+            let e_label = document.createElement('label');
+            let categoriaAppunto = appuntiTrovati[i].categoria;
+            e_label.onclick = function() { mostraAppunto(i) };
+            e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
+            if (categoriaCorrente === '*') {
+                e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
+            } else {
+                e_label.innerHTML = e_label.dataset.paroleRicerca;
+            }
+            e_elenco_appunti.appendChild(e_label);
+        }
+        preparaInserimentoNuovoAppunto();
+    }
 }
 
 function mostraAppunto(i) {
@@ -524,15 +559,19 @@ function caricaDaLocalStorage() {
     return false;
 }
 
+function eseguiRicercaPerParoleChiave() {
+    normalizzaInputParoleChiave();
+    svuotaAppuntoCorrente();
+    mostraAppuntiTrovati();
+    selezionaParoleChiave();
+    segnalaAppuntoModificato(false);
+}
+
 function controllaComando(event) {
     // Invio: inizia la ricerca
     if (event.keyCode === 13) {
         event.preventDefault();
-        normalizzaInputParoleChiave();
-        svuotaAppuntoCorrente();
-        mostraAppuntiTrovati();
-        selezionaParoleChiave();
-        segnalaAppuntoModificato(false);
+        eseguiRicercaPerParoleChiave();
     }
 }
 
