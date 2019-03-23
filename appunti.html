@@ -19,7 +19,7 @@
     }
     html, body, input, textarea, code {
         background: #555;
-        color:#ccc;
+        color:#cfcfcf;
         font-size: 1rem;
         font-family: sans-serif;
         line-height: 1.25rem;
@@ -29,6 +29,12 @@
     }
     input:focus, textarea:focus, button:focus, code:focus {
         outline: none;
+    }
+    a, a:visited {
+        color: #0ff;
+    }
+    a:hover {
+        color: #cc0;
     }
     ::selection {
         background: #9e9e0a;
@@ -95,12 +101,26 @@
     }
     .comandi .salvaAppuntoModificato {
         background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAJ0lEQVQ4y2NgGAWjYBTgBIwI5v//aFIUyTHRysVDz+BRMApGAR4AAFVDBggu+5KyAAAAAElFTkSuQmCC");
+        background-color: coral;
+        border-color: #f97 #c64 #c64 #f97;
     }
     .comandi .eliminaAppunto {
         background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAA8UlEQVQ4y7WVOw7DIAyGOUDXbpk7dKvUa2TuEXqB3qKHqppDhSVKKguZh1+ARJGsEPj9yYANzgnttASrNdRVtSCYHun//NG1+Rz4qHCYuDxtgDUGvgzOocehgTg0aa9vAs+XH4T77pz3jmg4FDSgTfC4LWX4CIUvWAnnUNSVcAFMHTS4rYlMeYm547qmOejrUJYhdfi2BeuA6nAanbaKSi7LcBolRt8B7QUjrEzXwVuhlv+Iw2OMkekWWX8rkDEljUbArZcQP/0cLpQ0dO5evzbzPLWuTXFrYWB+8QVLya+llvmK3L5tFUXhTe9e6yNp6X4/DTU0/L/qwAAAAABJRU5ErkJggg==");
     }
     .comandi .downloadAppunti {
         background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWAQMAAAD+ev54AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAADFJREFUCNdjYKhgYMCH2f83MDD/Z2Bg/Afk/4GIFRhYMHxgsAHj////wHH9/x8MUAAAFIoXUIkx3WQAAAAASUVORK5CYII=");
+    }
+    .comandi .inserisciTagHtml {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAZElEQVQ4y2NgGLZAcR8EUwn8/0+eHEFDYZgUOaINJWQw0Yaja+LkJM9yilxClHpMRbCUgAsTYThZYUZIP6WG4jScZgbjdjVxYUyzcCYzZVAxeRKrmCq5j4GayZMmhRBNi82RBgCaMe7hfeKokQAAAABJRU5ErkJggg==");
+    }
+    .comandi .inserisciTagMark {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAa0lEQVQ4y+XUSQoAIAgF0K7S/e/Q1WwREZXm9HcJLQR9NJdiDqIxoDFRKH6iEFxCU7iEpHCtOYRbm1w4X1zbXrXyEM5BXJ44yDccvhUSrK9M3e+7gd9XNwy8x5ZXl4alWUJgSw77fz+Cf4sOlrjkugZosPwAAAAASUVORK5CYII=");
+    }
+    .comandi .rimuoviTagHtml {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAApElEQVQ4y63Uyw2AMAgAUGg8m3hwAFbp4KzSTcSDMVGD5dNyMlJfaCsAJIO4n8dRtFWYExcqAiBCbFceRqfhGjqM99A07kE1HC20VZHY7hCnVapVXqxKiRHNKjL/6f3OuwP1AjX0mbPwMOrB02gPH0aD8yLWOcT77vomMq2Ity1UiAcnXtcIin9N8V3Yy73XTW7j7+Uv4SHiDNTPvJQM1upx3M8nkNYnLkblGykAAAAASUVORK5CYII=");
+    }
+    .comandi .svuotaLocalStorage {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWEAQAAAA+LXjzAAAAVklEQVQ4y2NkwAv+/8cvz8iIU4Z8Q/EbzkKuRkIWM5LuQuIcwsRAH/D/P3kux9THRLxiQnxUQLOgGDV41OBRg/EAFuKLS0J8ogymvAhlpJ6h+H0w+AEASjQgGag62FcAAAAASUVORK5CYII=");
     }
     #risultati {
         display: flex;
@@ -132,26 +152,53 @@
         padding: .5rem;
         border: none;
         font-family: monospace;
+        color: #aaa;
     }
+    #appunto h1, #appunto h2, #appunto h3 {
+        font-size: 1rem;
+        line-height: 1.25rem;
+        margin: 0;
+        padding: 0;
+    }
+    #appunto h1 {
+        background-color: #373737;
+        outline: 2px solid #373737;
+        color: #dfdfdf;
+    }
+    #appunto h2 {
+        background-color: #3f3f3f;
+        outline: 2px solid #3f3f3f;
+        color: #bfbfbf;
+    }
+    #appunto h3 {
+        background-color: #474747;
+        outline: 2px solid #474747;
+        color: #9f9f9f;
+    }
+    #appunto mark {
+        background: none;
+        color: #eee;
+    }
+
     </style>
 </head>
 
-<body onload="selezionaParoleChiave()">
+<body onload="eseguiRicercaPerParoleChiave()">
     <div id="ricerca">
         <label id="categoria">*</label>
         <input type="text" id="parole-chiave" onkeypress="controllaComando(event)"
             value="">
         <div class="comandi">
             <button onclick="copiaAppunto()" title="Copia appunto"
-                class="copiaAppunto">&nbsp;</button>
+                class="copiaAppunto" id="btnCopia">&nbsp;</button>
             <button onclick="salvaAppunto(CON_TITOLO)" title="Salva appunto nel browser"
                 onmouseover="autoSalvataggio=false" onmouseout="autoSalvataggio=true"
                 class="salvaAppunto" id="btnSalva">&nbsp;</button>
             <button onclick="eliminaAppunto()" title="Elimina appunto dal browser"
                 onmouseover="autoSalvataggio=false" onmouseout="autoSalvataggio=true"
-                class="eliminaAppunto">&nbsp;</button>
+                class="eliminaAppunto" id="btnElimina">&nbsp;</button>
             <button onclick="downloadAppunti()" title="Download appunti su file"
-                class="downloadAppunti">&nbsp;</button>
+                class="downloadAppunti" id="btnDownload">&nbsp;</button>
         </div>
     </div>
     <div id="risultati">
@@ -164,12 +211,13 @@
 <script type="text/javascript">
 // Costanti
 const CON_TITOLO = true;
-const SOLO_CATEGORIE = false;
+const CON_CATEGORIE = false;
 const APPUNTI_TROVATI = true;
 
 // Variabili generali
 var categoriaCorrente = '*';
 var paroleRicerca = [];
+var ripetiRicercaSeVuota = true;
 var appuntiTrovati = [];
 var appuntoCorrente = {
     'indice': -1,
@@ -178,13 +226,17 @@ var appuntoCorrente = {
 }
 var autoSalvataggio = true;
 var appuntoModificato = false;
+var ultimoTagInserito = '';
 
 // Elementi usati con frequenza
 var e_categoria = document.getElementById('categoria');
 var e_parole_chiave = document.getElementById('parole-chiave');
 var e_elenco_appunti = document.getElementById('elencoAppunti');
 var e_appunto = document.getElementById('appunto');
+var e_btn_copia = document.getElementById('btnCopia');
 var e_btn_salva = document.getElementById('btnSalva');
+var e_btn_elimina = document.getElementById('btnElimina');
+var e_btn_download = document.getElementById('btnDownload');
 
 function ordinaAppuntiTrovati() {
     appuntiTrovati.sort((a, b) => {
@@ -243,19 +295,16 @@ function cercaAppuntiRilevanti() {
         }
         ordinaAppuntiTrovati();
     // Se non ci sono parole di ricerca, mostra gli appunti più recenti
-    // Tale elenco è disponibile solo per una specifica categoria (non per tutte)
+    // Tale elenco è disponibile solo per una specifica categoria
     } else if (paroleRicerca.length === 0) {
-        if (categoriaCorrente === '*') {
-            return SOLO_CATEGORIE;
-        } else {
-            for (let i = appunti[categoriaCorrente].length - 1; i >= 0; i--) {
-                appuntiTrovati.push({
-                    'indice': i,
-                    'punteggio': 0,
-                    'categoria': categoriaCorrente
-                });
-            }
+        for (let i = appunti[categoriaCorrente].length - 1; i >= 0; i--) {
+            appuntiTrovati.push({
+                'indice': i,
+                'punteggio': 0,
+                'categoria': categoriaCorrente
+            });
         }
+        if (categoriaCorrente === '*') return CON_CATEGORIE;
     }
     return APPUNTI_TROVATI;
 }
@@ -300,6 +349,7 @@ function mostraElencoCategorie() {
     }
     categorie.sort();
     for (let i in categorie) {
+        if (categorie[i] === '*') continue;
         let e_label = document.createElement('label');
         e_label.innerHTML = categorie[i];
         e_label.onclick = function() { cercaCategoria(categorie[i]) };
@@ -310,24 +360,27 @@ function mostraElencoCategorie() {
 function mostraAppuntiTrovati() {
     svuotaElencoEtichette()
 
-    if (cercaAppuntiRilevanti() === SOLO_CATEGORIE) {
+    if (cercaAppuntiRilevanti() === CON_CATEGORIE)
         mostraElencoCategorie();
 
-    } else {
-        // Crea elenco di etichette per ogni appunto trovato
-        for (let i = 0; i < appuntiTrovati.length; i++) {
-            let e_label = document.createElement('label');
-            let categoriaAppunto = appuntiTrovati[i].categoria;
-            e_label.onclick = function() { mostraAppunto(i) };
-            e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
-            if (categoriaCorrente === '*') {
-                e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
-            } else {
-                e_label.innerHTML = e_label.dataset.paroleRicerca;
-            }
-            e_elenco_appunti.appendChild(e_label);
+    // Mostra elenco di etichette per ogni appunto trovato
+    for (let i = 0; i < appuntiTrovati.length; i++) {
+        let categoriaAppunto = appuntiTrovati[i].categoria;
+        let e_label = document.createElement('label');
+        e_label.onclick = function() { mostraAppunto(i) };
+        e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
+        if (categoriaCorrente === '*') {
+            e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
+        } else {
+            e_label.innerHTML = e_label.dataset.paroleRicerca;
         }
-        preparaInserimentoNuovoAppunto();
+        e_elenco_appunti.appendChild(e_label);
+    }
+    preparaInserimentoNuovoAppunto();
+    if (ripetiRicercaSeVuota && !e_elenco_appunti.firstChild) {
+        ripetiRicercaSeVuota = false;
+        normalizzaInputParoleChiave();
+        mostraAppuntiTrovati();
     }
 }
 
@@ -389,9 +442,7 @@ function copiaAppunto() {
         // Converte caratteri codificati nel relativo carattere
         testoAppunto = testoAppunto
             .replace(/<br>/g, '\n')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
+            .replace(/(<([^>]+)>)/ig, '')
             .replace(/&amp;/g, '&');
         // TODO Dopo aver specificato quali sono i #commenti, si potrebbe copiare solo il codice d'esempio
         // Copia testo negli appunti di sistema
@@ -399,6 +450,85 @@ function copiaAppunto() {
         // Seleziona ciò che è stato copiato
         e_appunto.focus();
         document.execCommand('selectAll');
+    }
+}
+
+function circondaSelezioneConTag(tag) {
+    let msgAnnulla = '';
+    let sel = window.getSelection();
+    let selTxt = sel.toString()
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+    // Annulla se la selezione è vuota
+    if (sel.isCollapsed || selTxt.trim() === '') {
+        msgAnnulla = 'La selezione è vuota.';
+    }
+    // Chiedi il tag all'utente se non è stato preinserito
+    let tagPreinserito = false;
+    if (tag !== 'mark') {
+        tag = prompt('Specifica il tag html che circonderà la selezione:', ultimoTagInserito);
+        if (tag === null) {
+            msgAnnulla = 'Inserimento annullato dall\'utente';
+        } else {
+            tag = tag.trim();
+        }
+    } else {
+        tagPreinserito = true;
+    }
+    // Annulla se il tag è vuoto
+    if (tag === '') {
+        msgAnnulla = 'Tag non valido.';
+    }
+    // Verifica annullamento tag
+    if (msgAnnulla !== '') {
+        alert('Inserimento tag annullato.\n\n' + msgAnnulla);
+        mostraComandiOrdinari();
+        return;
+    }
+    e_appunto.focus();
+    let range = sel.getRangeAt(0);
+    range.deleteContents();
+    let e_new = document.createElement(tag);
+    ultimoTagInserito = tag;
+    e_new.innerHTML = selTxt;
+    // Gestione speciale di alcuni tag
+    switch (tag) {
+        case 'a':
+            let link = prompt('Specifica l\'URL del link:', selTxt);
+            link = (link === null) ? '' : link.trim();
+            if (!link.startsWith('http://') && !link.startsWith('https://')) link = 'http://' + link;
+            e_new.setAttribute('href', link);
+            e_new.setAttribute('target', '_blank');
+            break;
+    }
+    range.insertNode(e_new);
+    if (!tagPreinserito) mostraComandiOrdinari();
+    segnalaAppuntoModificato(true);
+}
+
+function rimuoviTagDaSelezione() {
+    let modifica = false;
+    e_appunto.focus();
+    let sel = window.getSelection();
+    let selTxt = sel.toString().replace(/\n/g, '<br>');
+    if (sel.isCollapsed === true || selTxt === '') {
+        if (confirm("Nessuna selezione effettuata. Ripulire l'appunto da tutti i tag?")) {
+            modifica = true;
+            selTxt = e_appunto.innerHTML
+                .replace(/<br>/g, '\n')
+                .replace(/(<([^>]+)>)/ig, '')
+                .replace(/\n/g, '<br>');
+            e_appunto.innerHTML = '';
+        }
+    } else {
+        modifica = true;
+        let range = sel.getRangeAt(0);
+        range.deleteContents();
+    }
+    if (modifica) {
+        document.execCommand('insertHTML', false, selTxt);
+        mostraComandiOrdinari();
+        segnalaAppuntoModificato(true);
     }
 }
 
@@ -517,11 +647,13 @@ function salvaAppunto(conTitolo) {
 }
 
 function eliminaAppunto() {
-    e_appunto.innerHTML = '';
-    if (appuntoCorrente.indice !== -1) {
-        appunti[appuntoCorrente.categoria].splice(appuntoCorrente.indice, 1);
-        mostraAppuntiTrovati();
-        aggiornaLocalStorage();
+    if (confirm('Eliminare l\'appunto corrente?')) {
+        e_appunto.innerHTML = '';
+        if (appuntoCorrente.indice !== -1) {
+            appunti[appuntoCorrente.categoria].splice(appuntoCorrente.indice, 1);
+            mostraAppuntiTrovati();
+            aggiornaLocalStorage();
+        }
     }
 }
 
@@ -544,8 +676,8 @@ function caricaDaLocalStorage() {
     // Controlla che il browser supporti localStorage
     if (typeof(Storage) !== undefined) {
         try {
-            categorie = JSON.parse(localStorage.getItem("appunti_categorie"));
-            appunti = JSON.parse(localStorage.getItem("appunti_dati"));
+            categorie = JSON.parse(localStorage.getItem('appunti_categorie'));
+            appunti = JSON.parse(localStorage.getItem('appunti_dati'));
         } catch (e) {
             return false;
         }
@@ -559,9 +691,24 @@ function caricaDaLocalStorage() {
     return false;
 }
 
+function svuotaLocalStorageECaricaFile() {
+    if (confirm('Desideri svuotare la memoria locale del browser e ricaricare gli appunti dal file appunti.js?\n\n' +
+        'Se ci sono appunti non scaricati su un file, questi verranno persi. Procedere?')) {
+
+        localStorage.removeItem('appunti_categorie');
+        localStorage.removeItem('appunti_dati');
+        location.reload();
+
+    } else {
+        alert("Operazione annullata. La memoria locale sul browser è stata conservata.");
+    }
+    mostraComandiOrdinari();
+}
+
 function eseguiRicercaPerParoleChiave() {
     normalizzaInputParoleChiave();
     svuotaAppuntoCorrente();
+    ripetiRicercaSeVuota = true;
     mostraAppuntiTrovati();
     selezionaParoleChiave();
     segnalaAppuntoModificato(false);
@@ -585,6 +732,40 @@ function segnalaAppuntoModificato(statoModifica) {
     }
 }
 
+function mostraComandiAlternativi1() {
+    e_btn_copia.className = 'inserisciTagHtml';
+    e_btn_copia.title = 'Inserisci un tag html';
+    e_btn_copia.onclick = circondaSelezioneConTag;
+
+    e_btn_elimina.className = 'rimuoviTagHtml';
+    e_btn_elimina.title = 'Rimuovi tag html dalla selezione';
+    e_btn_elimina.onclick = rimuoviTagDaSelezione;
+
+    e_btn_download.className = 'svuotaLocalStorage';
+    e_btn_download.title = 'Svuota memoria appunti del browser';
+    e_btn_download.onclick = svuotaLocalStorageECaricaFile;
+}
+
+function mostraComandiAlternativi2() {
+    e_btn_copia.className = 'inserisciTagMark';
+    e_btn_copia.title = 'Inserisci il tag mark';
+    e_btn_copia.onclick = function() { circondaSelezioneConTag('mark') };
+}
+
+function mostraComandiOrdinari() {
+    e_btn_copia.className = 'copiaAppunto';
+    e_btn_copia.title = 'Copia appunto';
+    e_btn_copia.onclick = copiaAppunto;
+
+    e_btn_elimina.className = 'eliminaAppunto';
+    e_btn_elimina.title = 'Elimina appunto dal browser';
+    e_btn_elimina.onclick = eliminaAppunto;
+
+    e_btn_download.className = 'downloadAppunti';
+    e_btn_download.title = 'Download appunti su file';
+    e_btn_download.onclick = downloadAppunti;
+}
+
 function inserisciTabulazione(txt, event) {
     if (event.keyCode === 9) {
         event.preventDefault();
@@ -606,9 +787,27 @@ e_appunto.addEventListener('paste', function(event) {
     // Recupera solo testo semplice dagli appunti di sistema
     let text = (event.originalEvent || event).clipboardData.getData('text/plain');
     // Codifica entità html e conserva i ritorni a capo
-    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    text = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>')
+        .replace(/ /g, '&nbsp;')
+        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
     // Inserisce il testo come se fosse scritto manualmente
     document.execCommand('insertHTML', false, text);
+});
+
+document.addEventListener('keydown', function(event) {
+    // Se Shift resta premuto, i comandi cambiano funzione
+    if (event.keyCode === 16) mostraComandiAlternativi1();
+    if (event.shiftKey && event.keyCode === 17) mostraComandiAlternativi2();
+
+});
+
+document.addEventListener('keyup', function(event) {
+    // Se Shift viene rilasciato, i comandi tornano ordinari
+    if (event.keyCode === 16 || event.keyCode === 17) mostraComandiOrdinari();
 });
 
 if (!caricaDaLocalStorage()) {
