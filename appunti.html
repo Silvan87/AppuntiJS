@@ -141,6 +141,9 @@
         color:#aaa;
     }
     #elencoAppunti label:hover {
+        outline: 1px solid #cc0;
+    }
+    #elencoAppunti label.appuntoSelezionato {
         color: #cc0;
     }
     #appunto {
@@ -324,15 +327,27 @@ function titoloAppuntoInElenco() {
     return false; // titolo non trovato
 }
 
+function selezionaEtichetta(i) {
+    // Deseleziona tutte le etichette
+    for (let j = 0; j < e_elenco_appunti.childElementCount; j++) {
+        e_elenco_appunti.childNodes[j].classList.remove('appuntoSelezionato');
+    }
+    // Determina la presenza dell'etichetta 0 "(nuovo)"
+    let indiceInizio = e_elenco_appunti.childNodes[0].innerHTML.startsWith('(nuovo) ') ? 0 : 1;
+    // Seleziona etichetta corrente
+    e_elenco_appunti.childNodes[i - indiceInizio].classList.add('appuntoSelezionato');
+}
+
 function preparaInserimentoNuovoAppunto() {
     if (e_parole_chiave.value !== '' &&
         (!e_elenco_appunti.firstChild || !titoloAppuntoInElenco())) {
 
         let e_label = document.createElement('label');
-        e_label.onclick = function() { mostraAppunto(-1) };
+        e_label.onclick = function() { mostraAppunto(-1); selezionaEtichetta(0); };
         e_label.innerHTML = '(nuovo) ' + e_parole_chiave.value;
         e_label.classList.add('nuovoAppunto');
         e_elenco_appunti.insertBefore(e_label, e_elenco_appunti.firstChild);
+        selezionaEtichetta(0);
     }
 }
 
@@ -364,10 +379,11 @@ function mostraAppuntiTrovati() {
         mostraElencoCategorie();
 
     // Mostra elenco di etichette per ogni appunto trovato
+    scostamentoIndice = e_elenco_appunti.childElementCount;
     for (let i = 0; i < appuntiTrovati.length; i++) {
         let categoriaAppunto = appuntiTrovati[i].categoria;
         let e_label = document.createElement('label');
-        e_label.onclick = function() { mostraAppunto(i) };
+        e_label.onclick = function() { mostraAppunto(i); selezionaEtichetta(i+1+scostamentoIndice); };
         e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
         if (categoriaCorrente === '*') {
             e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
