@@ -43,6 +43,7 @@
     #categoria {
         color: #cc0;
         font-weight: bold;
+        cursor: pointer;
     }
     input, button {
         height: 2rem;
@@ -187,7 +188,7 @@
 
 <body onload="eseguiRicercaPerParoleChiave()">
     <div id="ricerca">
-        <label id="categoria">*</label>
+        <label id="categoria" onclick="eseguiRicercaPerParoleChiave('*')">*</label>
         <input type="text" id="parole-chiave" onkeypress="controllaComando(event)"
             value="">
         <div class="comandi">
@@ -720,7 +721,10 @@ function svuotaLocalStorageECaricaFile() {
     mostraComandiOrdinari();
 }
 
-function eseguiRicercaPerParoleChiave() {
+function eseguiRicercaPerParoleChiave(parole) {
+    if (parole !== undefined) {
+        e_parole_chiave.value = parole;
+    }
     normalizzaInputParoleChiave();
     svuotaAppuntoCorrente();
     ripetiRicercaSeVuota = true;
