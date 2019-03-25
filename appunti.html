@@ -182,7 +182,6 @@
         background: none;
         color: #eee;
     }
-
     </style>
 </head>
 
@@ -817,8 +816,9 @@ e_appunto.addEventListener('paste', function(event) {
 document.addEventListener('keydown', function(event) {
     // Se Shift resta premuto, i comandi cambiano funzione
     if (event.keyCode === 16) mostraComandiAlternativi1();
-    if (event.shiftKey && event.keyCode === 17) mostraComandiAlternativi2();
-
+    if ((event.shiftKey && event.keyCode === 17) ||
+        (event.ctrlKey && event.keyCode === 16))
+        mostraComandiAlternativi2();
 });
 
 document.addEventListener('keyup', function(event) {
