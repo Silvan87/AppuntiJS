@@ -225,7 +225,8 @@ var appuntiTrovati = [];
 var appuntoCorrente = {
     'indice': -1,
     'titolo': [],
-    'categoria': '*'
+    'categoria': '*',
+    'indiceEtichetta': -1
 }
 var autoSalvataggio = true;
 var appuntoModificato = false;
@@ -332,10 +333,11 @@ function selezionaEtichetta(i) {
     for (let j = 0; j < e_elenco_appunti.childElementCount; j++) {
         e_elenco_appunti.childNodes[j].classList.remove('appuntoSelezionato');
     }
-    // Determina la presenza dell'etichetta 0 "(nuovo)"
-    let indiceInizio = e_elenco_appunti.childNodes[0].innerHTML.startsWith('(nuovo) ') ? 0 : 1;
+    // Non prosegue se l'indice etichetta non è noto
+    if (i === -1) return;
     // Seleziona etichetta corrente
-    e_elenco_appunti.childNodes[i - indiceInizio].classList.add('appuntoSelezionato');
+    e_elenco_appunti.childNodes[i].classList.add('appuntoSelezionato');
+    appuntoCorrente.indiceEtichetta = i;
 }
 
 function preparaInserimentoNuovoAppunto() {
@@ -343,11 +345,10 @@ function preparaInserimentoNuovoAppunto() {
         (!e_elenco_appunti.firstChild || !titoloAppuntoInElenco())) {
 
         let e_label = document.createElement('label');
-        e_label.onclick = function() { mostraAppunto(-1); selezionaEtichetta(0); };
+        e_label.onclick = function() { mostraAppunto(e_label, -1); };
         e_label.innerHTML = '(nuovo) ' + e_parole_chiave.value;
         e_label.classList.add('nuovoAppunto');
         e_elenco_appunti.insertBefore(e_label, e_elenco_appunti.firstChild);
-        selezionaEtichetta(0);
     }
 }
 
@@ -379,11 +380,10 @@ function mostraAppuntiTrovati() {
         mostraElencoCategorie();
 
     // Mostra elenco di etichette per ogni appunto trovato
-    scostamentoIndice = e_elenco_appunti.childElementCount;
     for (let i = 0; i < appuntiTrovati.length; i++) {
         let categoriaAppunto = appuntiTrovati[i].categoria;
         let e_label = document.createElement('label');
-        e_label.onclick = function() { mostraAppunto(i); selezionaEtichetta(i+1+scostamentoIndice); };
+        e_label.onclick = function() { mostraAppunto(e_label, i); };
         e_label.dataset.paroleRicerca = appunti[categoriaAppunto][appuntiTrovati[i].indice][0].join(' ');
         if (categoriaCorrente === '*') {
             e_label.innerHTML = categoriaAppunto +' '+ e_label.dataset.paroleRicerca;
@@ -398,9 +398,10 @@ function mostraAppuntiTrovati() {
         normalizzaInputParoleChiave();
         mostraAppuntiTrovati();
     }
+    selezionaEtichetta(appuntoCorrente.indiceEtichetta);
 }
 
-function mostraAppunto(i) {
+function mostraAppunto(e_etichetta, i) {
     // L'indice non esiste, prepara nuovo appunto
     if (i === -1) {
         svuotaAppuntoCorrente()
@@ -420,6 +421,8 @@ function mostraAppunto(i) {
         appuntoCorrente.categoria = categoriaAppunto;
     }
     segnalaAppuntoModificato(false);
+    appuntoCorrente.indiceEtichetta = Array.from(e_etichetta.parentNode.children).indexOf(e_etichetta);
+    selezionaEtichetta(appuntoCorrente.indiceEtichetta);
 }
 
 function separaCategoriaDaParoleChiave() {
@@ -650,7 +653,10 @@ function salvaAppunto(conTitolo) {
                 
             }
             // Il salvataggio automatico non deve svuotare il testo dell'appunto
-            if (!autoSalvataggio) svuotaAppuntoCorrente();
+            if (!autoSalvataggio) {
+                svuotaAppuntoCorrente();
+                appuntoCorrente.indiceEtichetta = -1;
+            }
             mostraAppuntiTrovati();
             aggiornaLocalStorage();
             segnalaAppuntoModificato(false);
@@ -665,8 +671,12 @@ function salvaAppunto(conTitolo) {
 function eliminaAppunto() {
     if (confirm('Eliminare l\'appunto corrente?')) {
         e_appunto.innerHTML = '';
+        segnalaAppuntoModificato(false);
         if (appuntoCorrente.indice !== -1) {
             appunti[appuntoCorrente.categoria].splice(appuntoCorrente.indice, 1);
+            appuntoCorrente.titolo = [];
+            appuntoCorrente.indice = -1;
+            appuntoCorrente.indiceEtichetta = -1;
             mostraAppuntiTrovati();
             aggiornaLocalStorage();
         }
@@ -723,7 +733,12 @@ function svuotaLocalStorageECaricaFile() {
 
 function eseguiRicercaPerParoleChiave(parole) {
     if (parole !== undefined) {
-        e_parole_chiave.value = parole;
+        if (categoriaCorrente === '*' && parole === '*') {
+            e_parole_chiave.value = '';
+        } else {
+            e_parole_chiave.value = parole;
+        }
+        appuntoCorrente.indiceEtichetta = -1;
     }
     normalizzaInputParoleChiave();
     svuotaAppuntoCorrente();
@@ -737,6 +752,7 @@ function controllaComando(event) {
     // Invio: inizia la ricerca
     if (event.keyCode === 13) {
         event.preventDefault();
+        appuntoCorrente.indiceEtichetta = -1;
         eseguiRicercaPerParoleChiave();
     }
 }
@@ -812,7 +828,9 @@ e_appunto.addEventListener('paste', function(event) {
         .replace(/>/g, '&gt;')
         .replace(/\n/g, '<br>')
         .replace(/ /g, '&nbsp;')
-        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+        .replace(/&nbsp;(?!&nbsp;)/g, ' ')
+        .replace(/&nbsp; /g, '&nbsp;&nbsp;');
     // Inserisce il testo come se fosse scritto manualmente
     document.execCommand('insertHTML', false, text);
 });
@@ -827,7 +845,8 @@ document.addEventListener('keydown', function(event) {
 
 document.addEventListener('keyup', function(event) {
     // Se Shift viene rilasciato, i comandi tornano ordinari
-    if (event.keyCode === 16 || event.keyCode === 17) mostraComandiOrdinari();
+    if (event.keyCode === 16) mostraComandiOrdinari();
+    if (event.shiftKey && event.keyCode === 17) mostraComandiAlternativi1();
 });
 
 if (!caricaDaLocalStorage()) {
