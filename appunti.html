@@ -17,7 +17,7 @@
     html {
         font-size: 16px;
     }
-    html, body, input, textarea, code {
+    body, input, textarea, code {
         background: #555;
         color:#cfcfcf;
         font-size: 1rem;
@@ -39,6 +39,10 @@
     ::selection {
         background: #9e9e0a;
         color: white;
+    }
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
     }
     #categoria {
         color: #cc0;
@@ -132,6 +136,9 @@
         margin: .5rem .5rem 0 0;
         padding: .5rem;
         min-width: 15rem;
+        height: calc(100vh - 4.2rem);
+        overflow: auto;
+        scrollbar-width: none;
         background: #666;
     }
     #elencoAppunti label {
@@ -155,6 +162,8 @@
         margin-top: .5rem;
         padding: .5rem;
         border: none;
+        overflow: auto;
+        scrollbar-width: none;
         font-family: monospace;
         color: #aaa;
     }
@@ -650,7 +659,7 @@ function salvaAppunto(conTitolo) {
                     appunti[appuntoCorrente.categoria].push([appuntoCorrente.titolo, e_appunto.innerHTML]);
                     appuntoCorrente.indice = appunti[appuntoCorrente.categoria].length - 1;
                 }
-                
+
             }
             // Il salvataggio automatico non deve svuotare il testo dell'appunto
             if (!autoSalvataggio) {
@@ -707,7 +716,7 @@ function caricaDaLocalStorage() {
         } catch (e) {
             return false;
         }
-        if (categorie !== null && appunti !== null && 
+        if (categorie !== null && appunti !== null &&
             categorie !== undefined && appunti !== undefined) {
             // Caricamento da localStorage avvenuto con successo
             return true;
@@ -809,7 +818,7 @@ function inserisciTabulazione(txt, event) {
         let tabNode = document.createTextNode('\u00a0\u00a0\u00a0\u00a0');
         range.insertNode(tabNode);
         range.setStartAfter(tabNode);
-        range.setEndAfter(tabNode); 
+        range.setEndAfter(tabNode);
         selection.removeAllRanges();
         selection.addRange(range);
         appuntoModificato = true;
