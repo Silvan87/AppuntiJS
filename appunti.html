@@ -30,11 +30,14 @@
     input:focus, textarea:focus, button:focus, code:focus {
         outline: none;
     }
+    a::before, a:visited::before {
+        content: "🖝 ";
+    }
     a, a:visited {
-        color: #0ff;
+        color: #ccf;
     }
     a:hover {
-        color: #cc0;
+        color: #0ff;
     }
     ::selection {
         background: #9e9e0a;
@@ -170,7 +173,7 @@
     #appunto h1, #appunto h2, #appunto h3 {
         font-size: .95rem;
         line-height: 1.25rem;
-        margin: 0;
+        margin: 0 0 4px 0;
         padding: 0;
     }
     #appunto h1 {
@@ -190,7 +193,20 @@
     }
     #appunto mark {
         background: none;
-        color: #eee;
+        color: #d7d7d7;
+    }
+    #appunto u {
+        text-decoration: none;
+        border-bottom: 1px dashed #ccf;
+        background-color: #556;
+    }
+    @media (max-width: 600px) {
+        #risultati {
+            flex-direction: column;
+        }
+        #elencoAppunti, #appunto {
+            height: 100%;
+        }
     }
     </style>
 </head>
@@ -517,7 +533,7 @@ function circondaSelezioneConTag(tag) {
     let range = sel.getRangeAt(0);
     range.deleteContents();
     let e_new = document.createElement(tag);
-    ultimoTagInserito = tag;
+    if (tag !== 'mark') ultimoTagInserito = tag;
     e_new.innerHTML = selTxt;
     // Gestione speciale di alcuni tag
     switch (tag) {
