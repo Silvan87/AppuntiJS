@@ -213,7 +213,7 @@
 
 <body onload="eseguiRicercaPerParoleChiave()">
     <div id="ricerca">
-        <label id="categoria" onclick="eseguiRicercaPerParoleChiave('*')">*</label>
+        <label id="categoria" onclick="tornaACategoriaPiuGenerica()">*</label>
         <input type="text" id="parole-chiave" onkeypress="controllaComando(event)"
             value="">
         <div class="comandi">
@@ -266,6 +266,32 @@ var e_btn_copia = document.getElementById('btnCopia');
 var e_btn_salva = document.getElementById('btnSalva');
 var e_btn_elimina = document.getElementById('btnElimina');
 var e_btn_download = document.getElementById('btnDownload');
+
+function eseguiRicercaPerParoleChiave() {
+    normalizzaInputParoleChiave();
+    svuotaAppuntoCorrente();
+    ripetiRicercaSeVuota = true;
+    mostraAppuntiTrovati();
+    selezionaParoleChiave();
+    segnalaAppuntoModificato(false);
+}
+
+function tornaACategoriaPiuGenerica() {
+    if (e_parole_chiave.value !== '') {
+        e_parole_chiave.value = '';
+    } else {
+        if (e_categoria.innerHTML !== '*') {
+            e_parole_chiave.value = '*';
+        }
+    }
+    eseguiRicercaPerParoleChiave();
+}
+
+function normalizzaInputParoleChiave() {
+    e_parole_chiave.value = e_parole_chiave.value.trim().toLowerCase().replace(/[\s]+/g, ' ');
+    paroleRicerca = e_parole_chiave.value.split(' ').filter(function (e) { return e !== ''; });;
+    separaCategoriaDaParoleChiave();
+}
 
 function ordinaAppuntiTrovati() {
     appuntiTrovati.sort((a, b) => {
@@ -468,12 +494,6 @@ function separaCategoriaDaParoleChiave() {
     }
 }
 
-function normalizzaInputParoleChiave() {
-    e_parole_chiave.value = e_parole_chiave.value.trim().toLowerCase().replace(/[\s]+/g, ' ');
-    paroleRicerca = e_parole_chiave.value.split(' ').filter(function (e) { return e !== ''; });;
-    separaCategoriaDaParoleChiave();
-}
-
 function selezionaParoleChiave() {
     e_parole_chiave.selectionStart = 0;
     e_parole_chiave.selectionEnd = e_parole_chiave.value.length;
@@ -500,9 +520,13 @@ function copiaAppunto() {
 function circondaSelezioneConTag(tag) {
     let msgAnnulla = '';
     let sel = window.getSelection();
+    let range = sel.getRangeAt(0);
     let selTxt = sel.toString()
+        .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+        .replace(/\n/g, '<br>').replace(/ /g, '&nbsp;')
+        .replace(/&nbsp;(?!&nbsp;)/g, ' ')
+        .replace(/&nbsp; /g, '&nbsp;&nbsp;');
     // Annulla se la selezione è vuota
     if (sel.isCollapsed || selTxt.trim() === '') {
         msgAnnulla = 'La selezione è vuota.';
@@ -530,8 +554,6 @@ function circondaSelezioneConTag(tag) {
         return;
     }
     e_appunto.focus();
-    let range = sel.getRangeAt(0);
-    range.deleteContents();
     let e_new = document.createElement(tag);
     if (tag !== 'mark') ultimoTagInserito = tag;
     e_new.innerHTML = selTxt;
@@ -545,6 +567,7 @@ function circondaSelezioneConTag(tag) {
             e_new.setAttribute('target', '_blank');
             break;
     }
+    range.deleteContents();
     range.insertNode(e_new);
     if (!tagPreinserito) mostraComandiOrdinari();
     segnalaAppuntoModificato(true);
@@ -554,7 +577,10 @@ function rimuoviTagDaSelezione() {
     let modifica = false;
     e_appunto.focus();
     let sel = window.getSelection();
-    let selTxt = sel.toString().replace(/\n/g, '<br>');
+    let selTxt = sel.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
     if (sel.isCollapsed === true || selTxt === '') {
         if (confirm("Nessuna selezione effettuata. Ripulire l'appunto da tutti i tag?")) {
             modifica = true;
@@ -625,6 +651,7 @@ function svuotaAppuntoCorrente() {
     appuntoCorrente.categoria = categoriaCorrente;
     appuntoCorrente.titolo = paroleRicerca;
     appuntoCorrente.indice = -1;
+    appuntoCorrente.indiceEtichetta = -1;
 }
 
 function salvaAppunto(conTitolo) {
@@ -754,23 +781,6 @@ function svuotaLocalStorageECaricaFile() {
         alert("Operazione annullata. La memoria locale sul browser è stata conservata.");
     }
     mostraComandiOrdinari();
-}
-
-function eseguiRicercaPerParoleChiave(parole) {
-    if (parole !== undefined) {
-        if (categoriaCorrente === '*' && parole === '*') {
-            e_parole_chiave.value = '';
-        } else {
-            e_parole_chiave.value = parole;
-        }
-        appuntoCorrente.indiceEtichetta = -1;
-    }
-    normalizzaInputParoleChiave();
-    svuotaAppuntoCorrente();
-    ripetiRicercaSeVuota = true;
-    mostraAppuntiTrovati();
-    selezionaParoleChiave();
-    segnalaAppuntoModificato(false);
 }
 
 function controllaComando(event) {
